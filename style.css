@@ -1,0 +1,240 @@
+
+body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+
+}
+#menu-toggle{
+    display: none;
+
+}
+
+.menu-btn{
+   position: fixed;
+   top: 20px;
+   left: 20px;
+   width: 30px;
+   height: 22px;
+   cursor: pointer;
+   z-index: 1002;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+}
+
+/* menu span */
+.menu-btn span{
+    display: block;
+    height: 10px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 10px;
+    transition: 0.5s ease;
+}
+
+/* animaçao e posiçao */
+.slide-menu{
+    font-size: 14px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 120px;
+    height: 123%;
+    background-color: #e95fb0;
+    color: #000000;
+    transition: left 0.9s ease;
+    padding: 30px;
+    z-index: 850;
+}
+
+.slide-menu ul{
+    list-style: none;
+    padding: 200px 1px;
+    border-bottom: 1px solid rgba(255, 14, 14, 0.1);
+    cursor: pointer;
+}
+
+/* animaçao e tamanho*/
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+/* checked */
+#menu-toggle:checked ~ .slide-menu{
+    left: 0;
+}
+
+/* menu overlay para ficar visivel */
+#menu-toggle:checked ~ .overlay{
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+/* animaçao do botao */
+#menu-toggle:checked ~ .menu-btn span:nth-child(1){
+    transform: rotate(45deg) translate(13px);
+    background-color: rgb(255, 255, 255);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Mapa ocupa a maior parte da tela */
+#map {
+    flex: 1;
+    width: 66%;
+    height: 100%;
+    position: relative;
+}
+
+/* Painel de informações */
+#info {
+    height: 122px;
+    background-color: #fff;
+    padding: 26px 20px;
+    border-top: 1px solid #e0e0e0;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #333;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Painel de seleção de carros */
+#carros {
+
+  height: 70px;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+/* Botões dos carros */
+/* Botões de carro com imagem */
+.carro {
+display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 0px;
+    border-radius: 34px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s;
+    background-color: #000000;
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(224, 224, 224, 0.15);
+    width: 148px;
+}
+
+.carro img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+
+.carro:hover {
+  background-color: #ff549b;
+}
+
+.carro.selecionado {
+  background-color: #000000;
+  color: rgb(255, 255, 255);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Info destacada */
+#info strong {
+  font-size: 18px;
+  color: #fcfcfc;
+}
+
+
+
+/* busca estilizaçao*/
+*{
+    font-family:Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    margin: 0;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+.fondo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+    height: 50px;
+    background: #ffffff;
+    border-radius: 50px;
+    padding: 20px 40px;
+    box-shadow: 0 0px 10px rgba(0, 0, 0, .3);
+    transition: .7s ease
+}
+
+.fondo:hover{
+    width: 500px;
+
+}
+input{
+    width: 300px;
+    height: 40px;
+    color: #000000;
+    font-size: 20px;
+    border:none;
+    outline: none;
+    background:transparent;
+}
+i{
+    font-size: 22px;
+    color: rgb(0, 0, 0);
+    cursor:pointer;
+}
+
+

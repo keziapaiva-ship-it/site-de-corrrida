@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="stylesheet" href="/css/style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WN 57</title>
+</head>
+<body>
+    <input type="checkbox" id="menu-toggle">
+    <label for="menu-toggle" class="menu-btn">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+    <div class="slide-menu">
+        <ul>
+        <li>inicio</li>
+        <li>sobre</li>
+        <li>serviços</li>
+        <li>contato</li>
+        </ul>
+    </div>
+    <div class="overlay">
+    </div>
+</body>
+</head>
+
+
+
+
+<head>
+  <meta charset="utf-8" />
+  <title>Uber Clone Web</title>
+
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+<div id="map"></div>
+<div id="info">Aguardando localização...</div>
+
+<div id="carros">
+  <div class="carro selecionado" data-tipo="economico">Econômico</div>
+  <div class="carro" data-tipo="conforto">Conforto</div>
+  <div class="carro" data-tipo="luxo">Luxo</div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+<script>
+  var map = L.map('map').setView([0,0], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  var marker; // usuário
+  var routingControl;
+  var tipoCarroSelecionado = "economico";
+
+  // Lista de motoristas (posição inicial)
+  var motoristas = [
+    {id:1, nome:"Motorista 1", lat:-23.551, lng:-46.635, icon:'icons/carro1.png'},
+    {id:2, nome:"Motorista 2", lat:-23.552, lng:-46.640, icon:'icons/carro2.png'},
+    {id:3, nome:"Motorista 3", lat:-23.548, lng:-46.630, icon:'icons/carro3.png'}
+  ];
+
+  var motorMarkers = [];
+
+  // Adicionar motoristas no mapa
+  function mostrarMotoristas() {
+    motorMarkers.forEach(m => map.removeLayer(m)); // remove antigos
+    motorMarkers = motoristas.map(m => {
+      return L.marker([m.lat, m.lng], {icon:L.icon({
+        iconUrl: m.icon,
+        iconSize:[40,40],
+        iconAnchor:[20,20]
+      })}).addTo(map).bindPopup(m.nome);
+    });
+  }
+
+  mostrarMotoristas();
+
+  // Atualiza posição do usuário em tempo real
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(function(position) {
+      var lat = position.coords.latitude;
+      var lng = position.coords.longitude;
+
+      if (!marker) {
+        marker = L.marker([lat, lng], {icon:L.icon({
+          iconUrl:'https://cdn-icons-png.flaticon.com/512/64/64113.png',
+          iconSize:[40,40],
+          iconAnchor:[20,20]
+        })}).addTo(map).bindPopup("Você").openPopup();
+      } else {
+        marker.setLatLng([lat, lng]);
+      }
+
+      map.setView([lat, lng], 15);
+      document.getElementById("info").innerHTML = "Localização atualizada!";
+    }, function(error) {
+      document.getElementById("info").innerHTML = "Erro: " + error.message;
+    }, { enableHighAccuracy:true });
+  }
+
+  // Seleção de tipo de carro
+  document.querySelectorAll(".carro").forEach(c => {
+    c.addEventListener("click", function() {
+      document.querySelectorAll(".carro").forEach(x=>x.classList.remove("selecionado"));
+      c.classList.add("selecionado");
+      tipoCarroSelecionado = c.dataset.tipo;
+      if(routingControl) calcularPreco(routingControl.routes[0]);
+    });
+  });
+
+  // Clique no mapa para destino
+  map.on('click', function(e){
+    if(!marker) return alert("Aguarde localização inicial");
+
+    if(routingControl) map.removeControl(routingControl);
+
+    routingControl = L.Routing.control({
+      waypoints:[
+        marker.getLatLng(),
+        e.latlng
+      ],
+      routeWhileDragging:false
+    }).addTo(map);
+
+    routingControl.on('routesfound', function(e){
+      var route = e.routes[0];
+      calcularPreco(route);
+    });
+  });
+
+  // Função para calcular preço
+  function calcularPreco(route) {
+    var distancia = route.summary.totalDistance / 1000; // km
+    var tempo = route.summary.totalTime / 60;          // min
+
+    var tarifas = {
+      economico: {base:5, km:2, min:0.5},
+      conforto:  {base:8, km:3, min:0.75},
+      luxo:      {base:15, km:5, min:1}
+    };
+
+    var tarifa = tarifas[tipoCarroSelecionado];
+    var valor = tarifa.base + distancia*tarifa.km + tempo*tarifa.min;
+    valor = valor.toFixed(2);
+
+    document.getElementById("info").innerHTML =
+      "Distância: "+distancia.toFixed(2)+" km | Tempo: "+tempo.toFixed(0)+" min | Valor: R$ "+valor;
+  }
+
+</script>
+
+<div id="carros">
+  <div class="carro selecionado" data-tipo="economico">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.7h2yE2pODUl2TldhvX5c3wHaHa?pid=ImgDet&w=191&h=191&c=7&o=7&rm=3" alt="Econômico">
+    Econômico
+  </div>
+  <div class="carro" data-tipo="conforto">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.7h2yE2pODUl2TldhvX5c3wHaHa?pid=ImgDet&w=191&h=191&c=7&o=7&rm=3" alt="Conforto">
+    Conforto
+  </div>
+  <div class="carro" data-tipo="luxo">
+    <img src="https://tse2.mm.bing.net/th/id/OIP.7h2yE2pODUl2TldhvX5c3wHaHa?pid=ImgDet&w=191&h=191&c=7&o=7&rm=3" alt="Luxo">
+    Luxo
+  </div>
+</div>
+
+<body>
+    <div class="fondo">
+        <input type="text" placeholder="buscar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+</body>
+</html>
